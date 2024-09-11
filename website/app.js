@@ -36,15 +36,7 @@ const generateEntries = (e) => {
         if (res.status === 500) alert(res.error);
 
         if (res.status === 200) {
-          getAllData().then((res) => {
-            const { content, date, temp } = res;
-
-            // Write updated data to DOM elements
-            document.getElementById("temp").innerHTML =
-              Math.round(temp) + " " + "degrees";
-            document.getElementById("content").innerHTML = content;
-            document.getElementById("date").innerHTML = date;
-          });
+          getAllData();
         }
       });
     });
@@ -79,7 +71,13 @@ const getAllData = async () => {
     // Convert response to JSON
     const data = await response.json();
 
-    return data;
+    const { content, date, temp } = data;
+
+    // Write updated data to DOM elements
+    document.getElementById("temp").innerHTML =
+      Math.round(temp) + " " + "degrees";
+    document.getElementById("content").innerHTML = content;
+    document.getElementById("date").innerHTML = date;
   } catch (error) {
     alert("Failed to get data from server");
   }
