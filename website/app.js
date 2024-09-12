@@ -4,7 +4,7 @@ const baseUrl = "https://api.openweathermap.org/data/2.5/weather";
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+let newDate = d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear();
 
 //Main functions start//
 
@@ -36,7 +36,15 @@ const generateEntries = (e) => {
         if (res.status === 500) alert(res.error);
 
         if (res.status === 200) {
-          getAllData();
+          getAllData().then((res) => {
+            const { content, date, temp } = res;
+
+            // Write updated data to DOM elements
+            document.getElementById("temp").innerHTML =
+              Math.round(temp) + " " + "degrees";
+            document.getElementById("content").innerHTML = content;
+            document.getElementById("date").innerHTML = date;
+          });
         }
       });
     });
@@ -71,13 +79,7 @@ const getAllData = async () => {
     // Convert response to JSON
     const data = await response.json();
 
-    const { content, date, temp } = data;
-
-    // Write updated data to DOM elements
-    document.getElementById("temp").innerHTML =
-      Math.round(temp) + " " + "degrees";
-    document.getElementById("content").innerHTML = content;
-    document.getElementById("date").innerHTML = date;
+    return data;
   } catch (error) {
     alert("Failed to get data from server");
   }
